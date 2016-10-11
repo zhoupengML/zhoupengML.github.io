@@ -1,0 +1,1043 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>fast-rcnn</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="fast-rcnn"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2016-10-11T19:56+0800"/>
+<meta name="author" content="peng"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js">
+/**
+ *
+ * @source: http://orgmode.org/mathjax/MathJax.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in http://orgmode.org/mathjax/MathJax.js.
+ *
+ * Copyright (C) 2012-2013  MathJax
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in http://orgmode.org/mathjax/MathJax.js.
+ *
+ */
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code below.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code below is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code below.
+*/
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">fast-rcnn</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Fast R-CNN &ndash;Ross Girshick</a>
+<ul>
+<li><a href="#sec-1-1">1.1 Fast R-CNN architecture and training</a>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1 The RoI pooling layer</a></li>
+<li><a href="#sec-1-1-2">1.1.2 Initializing from pre-trained networks</a></li>
+<li><a href="#sec-1-1-3">1.1.3 Fine-tuning for detection</a></li>
+<li><a href="#sec-1-1-4">1.1.4 Scale invariance</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-2">1.2 Fast R-CNN detection</a>
+<ul>
+<li><a href="#sec-1-2-1">1.2.1 Truncated SVD for faster detection</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-3">1.3 Main results</a>
+<ul>
+<li><a href="#sec-1-3-1">1.3.1 Experimental setup</a></li>
+<li><a href="#sec-1-3-2">1.3.2 VOC 2010 and 2012 results</a></li>
+<li><a href="#sec-1-3-3">1.3.3 VOC 2007 results</a></li>
+<li><a href="#sec-1-3-4">1.3.4 Training and testing time</a></li>
+<li><a href="#sec-1-3-5">1.3.5 Which layers to fine-tune?</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-4">1.4 Design evaluation</a>
+<ul>
+<li><a href="#sec-1-4-1">1.4.1 Does multi-task training help?</a></li>
+<li><a href="#sec-1-4-2">1.4.2 Scale invariance : to brute force or finesse?</a></li>
+<li><a href="#sec-1-4-3">1.4.3 Do we need more training data?</a></li>
+<li><a href="#sec-1-4-4">1.4.4 Do SVMs outperform softmax?</a></li>
+<li><a href="#sec-1-4-5">1.4.5 Are more proposals always better?</a></li>
+<li><a href="#sec-1-4-6">1.4.6 Preliminary MS COCO results</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-5">1.5 Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Fast R-CNN &ndash;Ross Girshick</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p> 
+Paper: <a href="http://arxiv.org/abs/1504.08083">Fast R-CNN</a>
+Code: <a href="https://github.com/rbgirshick/fast-rcnn">Fast R-CNN's code</a>
+</p>
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Fast R-CNN architecture and training</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+   <img src="./pic_fast_rcnn/1.png"  alt="./pic_fast_rcnn/1.png" />
+</p><ul>
+<li>inputs: <b>an entire image</b>, <b>a set of object proposals</b>
+</li>
+<li>several convolutional and max pooling layers -&gt; produce a conv feature map
+</li>
+<li>for each object proposal: a RoI(region of interest) pooling layer extracts a 
+     fixed-length feature vector from the feature map
+</li>
+<li>each feature vector is fed into a sequence of fully connected(fc) layers 
+     that finally branch into two sibling(兄弟，姐妹，同属) output layers:
+     <b>one</b> that produces softmax probability estimates over K object classes
+     plus a catch-all "background" class and <b>another layer</b> that outputs 
+     four real-valued numbers for each of the K object classes.
+</li>
+<li><code>[&nbsp;]</code> ? 2. <i>Each set of 4 values encodes refined bounding-box positions for one of            the K classes.</i>
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-1-1-1" class="outline-4">
+<h4 id="sec-1-1-1"><span class="section-number-4">1.1.1</span> The RoI pooling layer</h4>
+<div class="outline-text-4" id="text-1-1-1">
+
+<ul>
+<li>The RoI pooling layer uses max pooling to convert the features inside any valid
+</li>
+</ul>
+
+<p>    region of interest into a small feature map with a fixed spatial extent of HxW,
+    wherer H and W are layer hyper-parameters that are independent of any particular RoI.
+</p>
+<ul>
+<li>RoI: (r,c,h,w) specifies its top-left corner(r,c) and its height and width(h,w).
+
+</li>
+<li>RoI max pooling layer divides the hxw RoI window into an HxW grid of sub-windows of
+      approximate size h/H x w/W and then max-pooling the values in each sub-window into 
+      the corresponding output grid cell.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-1-2" class="outline-4">
+<h4 id="sec-1-1-2"><span class="section-number-4">1.1.2</span> Initializing from pre-trained networks</h4>
+<div class="outline-text-4" id="text-1-1-2">
+
+
+<ul>
+<li>When a pre-trained network initializes a Fast R-CNN network, it undergoes three
+      transformations:
+<ol>
+<li>The last max pooling layer is replaced by a RoI pooling layer that is configured
+         by setting H and W to be compatible with the net's first fully connected layer
+         (e.g., H = W = 7 for VGG16).
+</li>
+<li>The network's last fully connected layer and softmax are replaced with the two 
+         sibling layers described earlier: a fully connected layer and softmax over K + 1
+         categories, category-specific bounding-box regressors.
+</li>
+<li>The network is modified to take two data inputs: a list of images and a list of
+         RoIs in those images.
+</li>
+</ol>
+
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-1-3" class="outline-4">
+<h4 id="sec-1-1-3"><span class="section-number-4">1.1.3</span> Fine-tuning for detection</h4>
+<div class="outline-text-4" id="text-1-1-3">
+
+
+<ul>
+<li>In Fast R-CNN training, stochastic gradient descent(SGD) mini-batches are sampled 
+      hierarchically.
+<ol>
+<li>First sampling N images
+</li>
+<li>Second sampling R/N RoIs from each image.
+</li>
+</ol>
+
+</li>
+<li>RoIs from the same image share computation and memory in the forward and backward
+      passes.
+</li>
+<li>One concern over this strategy is it may cause slow training convergence because
+      RoIs from the same image are correlated. This concern does not appear to be a 
+      practical issue and we achieve good results with N = 2 and R = 128 using fewer
+      SGD iterations than R-CNN.
+</li>
+</ul>
+
+
+<ul>
+<li id="sec-1-1-3-1">Multi-task loss<br/>
+
+<ul>
+<li>A Fast R-CNN network has two sibling output layers.
+<ol>
+<li>The first outputs a discrete probability distribution(per RoI), 
+          \(p = (p_0, ..., p_K)\), over K + 1 categories.(a softmax over the K + 1 outputs of a
+          fully connected layer.
+</li>
+<li>The second sibling layer outputs bounding-box regression offsets, 
+          \(t^k = (t_x^k, t_y^k, t_w^k, t_h^k)\), for each of the K object classes, indexed by k.
+</li>
+<li><code>[&nbsp;]</code> We use the parameterization for \(t^k\) given in <sup><a class="footref" name="fnr-.1" href="#fn-.1">1</a></sup>, in which t<sup>k</sup> specifies a
+          scale-invariant translation and log-space height/width shift relative to an object 
+          proposal.
+</li>
+</ol>
+
+</li>
+<li><b>Each trainging RoI</b> is labeled with a ground-truth class u and a ground-truth bounding-box
+       regression target v. We use a multi-task loss L on each labeled RoI to jointly train for
+       classification and bounding-box regression:
+       \begin{equation}
+         L(p, u, t^u, v) = L_{cls}(p, u) + \lambda[u\ge1]L_{loc}(t^u, v)         
+       \end{equation}
+       in which \(L_{cls}(p, u)  = -logp_u\) is log loss for true class u.
+</li>
+<li>The second task loss , \(L_loc\), is defined over a tuple of true bounding-box regression 
+       targets for class u. The Iverson bracket indicator function \([u\ge1]\) evaluates to 1 when 
+       \(u&gt;1\) and 0 otherwise.For background RoIs there is no notion of a ground-truth bounding box
+       and hence \(L_{loc}\) is ignored. For bounding-box regression, we use the loss
+       \begin{equation}
+         L_{loc}(t^u, v) = \sum_{i\in{x, y, w, h}} smooth_{L_1}(t_i^u - v_i)         
+       \end{equation}
+       in which 
+       \begin{equation}
+         smooth_{L_1}(x) = 
+       \begin{cases}
+       {0.5x^2} &\mbox{if |x| < 1}\\
+       {|x| - 0.5} &\mbox{otherwise}
+       \end{cases}
+       \end{equation}
+       is a robust \(L_1\) loss that is less sensitive to outliers than the \(L_2\) loss used in 
+       R-CNN and SPPnet.
+<ul>
+<li>When the regression targets are unbounded, training with \(L_2\) loss can require careful
+         tuning of learning rates in order to prevent exploding gradients. Eq.3 eliminates this
+         sensitivity.
+</li>
+</ul>
+
+</li>
+<li>We normalize the ground-truth regression targets \(v_i\) to have zero mean and unit variance.
+       All experiments use \(\lambda = 1\).
+</li>
+<li><sup><a class="footref" name="fnr-.2" href="#fn-.2">2</a></sup> uses a related loss to train a class agnostic object proposal network. <sup><a class="footref" name="fnr-.2.2" href="#fn-.2">2</a></sup> advocates
+       for a two-network system that separates localization and classification.
+</li>
+<li>OverFeat<sup><a class="footref" name="fnr-.3" href="#fn-.3">3</a></sup>, R-CNN<sup><a class="footref" name="fnr-.1.2" href="#fn-.1">1</a></sup>, and SPPnet<sup><a class="footref" name="fnr-.4" href="#fn-.4">4</a></sup> alse train classifiers and bounding-box 
+       localizers, however these methods use stage-wise training, which we show is suboptimal
+       for Fast R-CNN.
+</li>
+</ul>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-1-1-3-2">Mini-batch sampling<br/>
+
+<ol>
+<li>During fine-tuning, each SGD mini-batch is constructed from N = 2 images, chosen uniformly
+        at random. We use mini-batches of size R = 128, sampling 64 RoIs from each images.
+</li>
+<li>As in <sup><a class="footref" name="fnr-.1.3" href="#fn-.1">1</a></sup>, we take 25% of the RoIs from object proposals that have intersection over
+        union(IoU) overlap with a ground-truth bounding box of at least 0.5. These RoIs comprise
+        the examples labeled with a foreground object class, i.e. \(u \ge 1\).
+</li>
+<li>The remaining RoIs are sampled from object proposals that have a maximum IoU with ground truth
+        in the interval [0.1, 0.5), following <sup><a class="footref" name="fnr-.4.2" href="#fn-.4">4</a></sup>.
+<ol>
+<li>These are the background examples and are labeled with u = 0.
+</li>
+<li>The lower threshold of 0.1 appears to act as a heuristic for hard example mining <sup><a class="footref" name="fnr-.5" href="#fn-.5">5</a></sup>.
+</li>
+</ol>
+
+</li>
+<li>During traing, images are horizontally flipped with probability 0.5. No other data 
+        augmentation is used.
+</li>
+</ol>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-1-1-3-3">Back-propagation through RoI pooling layers<br/>
+
+<ol>
+<li>The RoI pooling layer's backwards function computes partial derivative of the loss
+        function with respect to each input variable \(x_i\) by following the argmax switches:
+        \begin{equation}
+          \frac{\partial{L}}{\partial{x_i}} = \sum_r\sum_j[i = i*(r,j)]\frac{\partial{L}}{\partial{y_{rj}}}
+        \end{equation}
+<ul>
+<li>where \(x_i\in{R}\) be the i-th activation input into the RoI pooling layer and 
+</li>
+</ul>
+
+<p>        \(y_{rj}\) be the layer's j-th output from the r-th RoI.
+</p><ul>
+<li>The RoI pooling layer computes \(y_{rj}=x_{i*(r,j)}\), in which \(i*(r,j)=argmax_{i^{'}\in{R(r,j)}}x_{i^{'}}\). 
+</li>
+</ul>
+
+<p>        \(R(r,j)\) is the index set of inputs in the sub-window over which the output unit \(y_{rj}\) 
+        max pools.
+</p></li>
+</ol>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-1-1-3-4">SGD hyper-parameters<br/>
+
+<ul>
+<li>The fully connected layers used for softmax classification and bounding-box regression
+       are initialized from \(N(0,0.01^2)\) and \(N(0,0.001^2)\). Biases are initialized to 0.
+</li>
+<li>All layers use a pre-layer learning rate of 1 for weights and 2 for biases and a global
+       learning rate of 0.001.
+</li>
+<li>When training on VOC07 or VOC12 trainval we run SGD for 30k mini-batch iterations, and
+       then lower the learning rate to 0.0001 and train for another 10k iterations.
+</li>
+<li>Momentum : 0.9 , Parameter decay : 0.0005(on weights and biases)
+</li>
+</ul>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-1-1-4" class="outline-4">
+<h4 id="sec-1-1-4"><span class="section-number-4">1.1.4</span> Scale invariance</h4>
+<div class="outline-text-4" id="text-1-1-4">
+
+
+<ol>
+<li>We explore two ways of achieving scale invariant object detection:
+<ol>
+<li>via "brute force"
+</li>
+<li>by using image pyramids
+</li>
+</ol>
+
+</li>
+<li>These strategies follow the two approaches in <sup><a class="footref" name="fnr-.4.3" href="#fn-.4">4</a></sup>.
+</li>
+<li>Brute-force approach
+<ul>
+<li>Each image is processed at a pre-defined pixel size during both training and testing.
+</li>
+<li>The network must directly learn scale-invariant object detection from the training data.
+</li>
+</ul>
+
+</li>
+<li>Multi-scale approach
+<ul>
+<li>Provides approximate scale-invariance to the network through an image pyramid.
+</li>
+<li>At test-time, the image pyramid is used to approximately scale-normalize each object 
+         proposal.
+</li>
+<li>During multi-scale training, we randomly sample a pyramid scale each time an image is
+         sampled, following <sup><a class="footref" name="fnr-.4.4" href="#fn-.4">4</a></sup>, as a form of data augmentation.
+</li>
+</ul>
+
+</li>
+<li>We experiment with multi-scale training for smaller networks only, due to GPU memory limits.
+</li>
+</ol>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Fast R-CNN detection</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<ul>
+<li>The network takes as input an image(or an image pyramid, encoded as a list of images) and a list
+     of R object proposals to score. At test-time, R is typically around 2000, although we will 
+     consider cases in which it is larger(\(\approx45k\)).
+</li>
+<li>When using an image pyramid, each RoI is assigned to the scale such that the scaled RoI is
+     closest to \(224^2\) pixels in area <sup><a class="footref" name="fnr-.4.5" href="#fn-.4">4</a></sup>.
+</li>
+<li>For each test RoI r, the forward pass outputs a class posterior probability distribution p and
+     a set of predicted bounding-box offsets relative to r(each of the K classes gets its own refined
+     bounding-box prediction).
+</li>
+<li>We assign a detection confidence to r for each object class k using the estimated probability 
+     \(P_r(class=k|r)=p_k\).
+</li>
+<li>We then perform non-maximum suppression independently for each class using the algorithm and 
+     settings from R-CNN<sup><a class="footref" name="fnr-.1.4" href="#fn-.1">1</a></sup>.
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-1-2-1" class="outline-4">
+<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> Truncated SVD for faster detection</h4>
+<div class="outline-text-4" id="text-1-2-1">
+
+
+<p>
+   <img src="./pic_fast_rcnn/2.png"  alt="./pic_fast_rcnn/2.png" />
+</p><ul>
+<li>For whole-image classification, the time spent computing the fully connected layers is small 
+     compared to the conv layers. On the contrary, for detection the number of RoIs to process is
+     large and nearly half of the forward pass time is spent computing the fully connected layers.
+</li>
+<li>Large fully connected layers are easily accelerated by compressing them with truncated 
+     SVD<sup><a class="footref" name="fnr-.6" href="#fn-.6">6</a></sup><sup>, </sup><sup><a class="footref" name="fnr-.7" href="#fn-.7">7</a></sup>.
+</li>
+<li>In this technique, a layer parameterized by the \(u\times{v}\) weight matrix W is approximately 
+     factorized as
+     \begin{equation}
+       W\approx{U\sum_tV^T}
+     \end{equation}
+     In this factorization, U is a \(u\times{t}\) matrix comprising the first t left-singular vectors
+     of W, \(\sum_t\) is a \(t\times{t}\) diagonal matrix containing the top t singular values of W,
+     and V is \(v\times{t}\) matrix comprising the first t right-singular vectors of W.
+</li>
+<li>Truncated SVD reduces the parameter count from \(uv\) to \(t(u+v)\), which can be 
+     significant if t is much smaller than min(u,v).
+</li>
+<li>To compress a network, the single fully connected layer corresponding to W is replaced
+     by two fully connected layers, without a non-linearity between them.
+<ol>
+<li>The first of these layers uses the weight matrix \(\sum_tV^T\) (and no biases).
+</li>
+<li>The second uses \(U\) (with the original biases associated with \(W\)).
+</li>
+</ol>
+
+</li>
+<li>This simple compression method gives good speedups when the number of RoIs is large.
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Main results</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+<ul>
+<li>Three main results support this paper's contributions:
+<ol>
+<li>State-of-the-art mAP on VOC07, 2010, and 2012
+</li>
+<li>Fast training and testing compared to R-CNN, SPPnet
+</li>
+<li>Fine-tuning conv layers in VGG16 improves mAP
+</li>
+</ol>
+
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-1-3-1" class="outline-4">
+<h4 id="sec-1-3-1"><span class="section-number-4">1.3.1</span> Experimental setup</h4>
+<div class="outline-text-4" id="text-1-3-1">
+
+<ul>
+<li>Our experiments use three pre-trained ImageNet models that are available online<sup><a class="footref" name="fnr-.8" href="#fn-.8">8</a></sup>.
+<ol>
+<li>The first is the CaffeNet(essentially AlexNet<sup><a class="footref" name="fnr-.9" href="#fn-.9">9</a></sup>) from R-CNN<sup><a class="footref" name="fnr-.1.5" href="#fn-.1">1</a></sup>. We alternatively
+         refer to this CaffeNet as model \(S\), for "small".
+</li>
+<li>The second network is VGG<sub>CNN</sub><sub>M</sub><sub>1024</sub> from <sup><a class="footref" name="fnr-.10" href="#fn-.10">10</a></sup>, which has the same depth as \(S\),
+         but is wider. We call this network model \(M\), for "medium".
+</li>
+<li>The final network is the very deep VGG16 model from <sup><a class="footref" name="fnr-.11" href="#fn-.11">11</a></sup>. We call  it model \(L\).
+</li>
+</ol>
+
+</li>
+<li>In this section, all experiments use single-scale training and testing(s=600).
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3-2" class="outline-4">
+<h4 id="sec-1-3-2"><span class="section-number-4">1.3.2</span> VOC 2010 and 2012 results</h4>
+<div class="outline-text-4" id="text-1-3-2">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3-3" class="outline-4">
+<h4 id="sec-1-3-3"><span class="section-number-4">1.3.3</span> VOC 2007 results</h4>
+<div class="outline-text-4" id="text-1-3-3">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3-4" class="outline-4">
+<h4 id="sec-1-3-4"><span class="section-number-4">1.3.4</span> Training and testing time</h4>
+<div class="outline-text-4" id="text-1-3-4">
+
+
+<ul>
+<li>Fast training  and testing times are our second main result.
+
+<p>
+      <img src="./pic_fast_rcnn/table4.png"  alt="./pic_fast_rcnn/table4.png" />
+</p></li>
+</ul>
+
+
+<ul>
+<li id="sec-1-3-4-1">Truncated SVD<br/>
+
+<ul>
+<li>Truncated SVD can reduce detection time by more than 30% with only a small drop 
+       in mAP and without needing to perform additional fine-tuning after model compression.
+</li>
+<li>Using the top 1024 singular values from the \(25088\times{4096}\) matrix in VGG16's fc6 layer
+       and the top 256 singular values from the \(4096\times{4096}\) fc7 layer reduces runtime
+       with little loss in mAP.
+
+<p>
+       <img src="./pic_fast_rcnn/2.png"  alt="./pic_fast_rcnn/2.png" />
+</p></li>
+</ul>
+
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-1-3-5" class="outline-4">
+<h4 id="sec-1-3-5"><span class="section-number-4">1.3.5</span> Which layers to fine-tune?</h4>
+<div class="outline-text-4" id="text-1-3-5">
+
+
+<ul>
+<li>Our hypothesis: training through the RoI pooling layer is important for very deep nets.
+
+<p>
+      <img src="./pic_fast_rcnn/table5.png"  alt="./pic_fast_rcnn/table5.png" />
+</p>
+</li>
+<li>Does this mean that all conv layers should be fine-tuned?
+      In short, no.
+<ol>
+<li>In the smaller networks \(S\) and \(M\) , we find that conv1 is generic and task 
+         independent(a well-known fact)<sup><a class="footref" name="fnr-.12" href="#fn-.12">12</a></sup>. Allowing conv1 to learn, or not, has no
+         meaningful effect on mAP.
+</li>
+<li>For VGG16, we found it only necessary to update layers from conv3<sub>1</sub> and up(9 of the 13
+         conv layers).
+</li>
+<li>This observation is pragmatic:
+<ol>
+<li>updating from conv2<sub>1</sub> slows trainging by 1.3x (12.5 vs. 9.5 hours) compared to 
+            learning from conv3<sub>1</sub>
+</li>
+<li>Updating from conv1<sub>1</sub> over-runs GPU memory
+</li>
+</ol>
+
+</li>
+<li>All Fast R-CNN results in this paper using VGG16 fine-tune layers conv3<sub>1</sub> and up;
+         all experiments with models \(S\) and \(M\) fine-tune layers conv3 and up.
+</li>
+</ol>
+
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Design evaluation</h3>
+<div class="outline-text-3" id="text-1-4">
+
+
+<ul>
+<li>We conducted experiments to understand how Fast R-CNN compares to R-CNN and SPPnet, as well 
+     as to evaluate design decisions.
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-1-4-1" class="outline-4">
+<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> Does multi-task training help?</h4>
+<div class="outline-text-4" id="text-1-4-1">
+
+
+<ul>
+<li>We observe that multi-task training improves pure classification accuracy relative to
+      training for classification alone.
+</li>
+<li>Stage-wise training improves mAP over column one, but underperforms multi-task training.
+
+<p>    
+      <img src="./pic_fast_rcnn/table6.png"  alt="./pic_fast_rcnn/table6.png" />
+</p></li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4-2" class="outline-4">
+<h4 id="sec-1-4-2"><span class="section-number-4">1.4.2</span> Scale invariance : to brute force or finesse?</h4>
+<div class="outline-text-4" id="text-1-4-2">
+
+
+<ul>
+<li>We compare two strategies for achieving scale-invariant object detection:
+      brute-force learning(single scale) and image pyramids(multi-scale). In either
+      case, we define the scale s of an image to be the length of its shortest side.
+</li>
+<li>All single-scale experiments use s = 600 pixels.
+</li>
+<li>In the multi-scale setting, we use the same five scales specified in <sup><a class="footref" name="fnr-.4.6" href="#fn-.4">4</a></sup>
+      \(s\in{{480,576,688,864,1200}}\) to facilitate comparison with SPPnet.
+      <img src="./pic_fast_rcnn/table7.png"  alt="./pic_fast_rcnn/table7.png" />
+</li>
+<li>Deep ConvNets are adept at directly learning scale invariance.
+</li>
+<li>The multi-scale approach offers only a small increase in mAP at a large cost
+      in compute time.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4-3" class="outline-4">
+<h4 id="sec-1-4-3"><span class="section-number-4">1.4.3</span> Do we need more training data?</h4>
+<div class="outline-text-4" id="text-1-4-3">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4-4" class="outline-4">
+<h4 id="sec-1-4-4"><span class="section-number-4">1.4.4</span> Do SVMs outperform softmax?</h4>
+<div class="outline-text-4" id="text-1-4-4">
+
+
+<ul>
+<li>Fast R-CNN uses the softmax classifier learnt during fine-tuning instead of
+      training one-vs-rest linear SVMs post-hoc, as was done in R-CNN and SPPnet.
+      <img src="./pic_fast_rcnn/table8.png"  alt="./pic_fast_rcnn/table8.png" />
+</li>
+<li>Softmax slightly outperforming SVM for all three networks.
+</li>
+<li>This effect is small, but it demonstrates that "one-shot" fine-tuning is sufficient
+      compared to previous multi-stage training approaches.
+</li>
+<li>We note that softmax, unlike one-vs-rest SVMs, introduces competition between classes
+      when scoring a RoI.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4-5" class="outline-4">
+<h4 id="sec-1-4-5"><span class="section-number-4">1.4.5</span> Are more proposals always better?</h4>
+<div class="outline-text-4" id="text-1-4-5">
+
+
+<ul>
+<li>There are two types of object detectors : those that use a sparse set of object 
+      proposals<sup><a class="footref" name="fnr-.13" href="#fn-.13">13</a></sup> and those that use a dense set DPM<sup><a class="footref" name="fnr-.14" href="#fn-.14">14</a></sup>.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4-6" class="outline-4">
+<h4 id="sec-1-4-6"><span class="section-number-4">1.4.6</span> Preliminary MS COCO results</h4>
+<div class="outline-text-4" id="text-1-4-6">
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Conclusion</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+<ul>
+<li>This paper proposes Fast R-CNN, a clean and fast update to R-CNN and SPPnet.
+</li>
+<li>Of particular note, sparse object proposals appear to improve detector quality.
+</li>
+<li>There may exist yet undiscovered techniques that allow dense boxes to perform 
+     as well as sparse proposals.
+</li>
+</ul>
+
+
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+<p class="footnote"><sup><a class="footnum" name="fn-.1" href="#fnr-.1">1</a></sup> R. Girshick, J. Donahue, T. Darrell, and J. Malik.  
+  Rich feature hierarchies for accurate object detection and semantic segmentation. In CVPR, 2014.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.2" href="#fnr-.2">2</a></sup> D. Erhan, C. Szegedy, A. Toshev, and D. Anguelov. 
+Scalable object detection using deep neural networks. In CVPR, 2014.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.3" href="#fnr-.3">3</a></sup> P. Sermanet,  D. Eigen,  X. Zhang,  M. Mathieu,  R. Fergus,and Y. LeCun.  
+OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks.  
+In ICLR,2014.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.4" href="#fnr-.4">4</a></sup> K. He, X. Zhang, S. Ren, and J. Sun. 
+Spatial pyramid pooling in  deep  convolutional  networks  for  visual  recognition.   
+In ECCV, 2014.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.5" href="#fnr-.5">5</a></sup> P.  Felzenszwalb,  R.  Girshick,  D.  McAllester,  and  D.  Ramanan.   
+Object detection with discriminatively trained part based models.
+TPAMI, 2010.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.6" href="#fnr-.6">6</a></sup> E. Denton, W. Zaremba, J. Bruna, Y. LeCun, and R. Fergus.
+Exploiting linear structure within convolutional networks for efficient evaluation. 
+InNIPS, 2014.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.7" href="#fnr-.7">7</a></sup> J.  Xue,  J.  Li,  and  Y.  Gong.   
+Restructuring  of  deep  neural network acoustic models with singular value decomposition.
+In Interspeech, 2013.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.8" href="#fnr-.8">8</a></sup> <a href="https://github.com/BVLC/caffe/wiki/Model-Zoo">https://github.com/BVLC/caffe/wiki/Model-Zoo</a>
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.9" href="#fnr-.9">9</a></sup> A. Krizhevsky, I. Sutskever, and G. Hinton.  
+ImageNet classification with deep convolutional neural networks. 
+In NIPS,2012.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.10" href="#fnr-.10">10</a></sup> K. Chatfield, K. Simonyan, A. Vedaldi, and A. Zisserman.
+Return of the devil in the details:  Delving deep into convolutional nets. 
+In BMVC, 2014.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.11" href="#fnr-.11">11</a></sup> K.  Simonyan  and  A.  Zisserman.   
+Very  deep  convolutional networks for large-scale image recognition.  
+In ICLR, 2015.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.12" href="#fnr-.12">12</a></sup> A. Krizhevsky, I. Sutskever, and G. Hinton.  
+ImageNet classification with deep convolutional neural networks. 
+In NIPS,2012.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.13" href="#fnr-.13">13</a></sup> J. Uijlings, K. van de Sande, T. Gevers, and A. Smeulders.
+Selective search for object recognition.
+IJCV, 2013.
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn-.14" href="#fnr-.14">14</a></sup> P.  Felzenszwalb,  R.  Girshick,  D.  McAllester,  and  D.  Ramanan.   
+Object detection with discriminatively trained part based models.
+TPAMI, 2010.
+</p></div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2016-10-11T19:56+0800</p>
+<p class="author">Author: peng</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
