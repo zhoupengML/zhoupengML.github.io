@@ -6,7 +6,7 @@ kramdown:
 rouge: true
 permalink: /:title
 
-title: 忍把浮名，换了代码几行
-url: http://www.fangr.tk
+title: 永恒的心
+url: http://zhoupengml.github.io
 feed: /atom.xml
-author_info: <a href="http://www.fangr.tk/">Peng Zhou</a>
+author_info: <a href="http://zhoupengml.github.io/">Peng Zhou</a>
